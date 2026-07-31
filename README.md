@@ -19,17 +19,34 @@ DOM-independent pan/zoom gesture math with an optional DOM pointer/wheel adapter
 
 ## Pure core
 
+`createPanScaleCore` is stateless: your app owns the `panX` / `panY` / `scale`
+values and passes in getters so the core can read them. When a gesture wants to
+change the transform, the core calls `onUpdate` instead of mutating your state
+directly.
+
+`onUpdate` receives a single argument — a function. Call that function with a
+`PanScaleSetters` object (`{ setPanX, setPanY, setScale }`) to commit the new
+values, then run any follow-up work such as re-rendering. The indirection lets
+the core apply several setter calls as one atomic update while leaving both
+state ownership and post-update side effects up to you:
+
 ```ts
 import { createPanScaleCore } from "@random-mesh/rm-pan-scale";
+
+// Your own state, wherever you keep it.
+let state = { panX: 0, panY: 0, scale: 1 };
 
 const core = createPanScaleCore({
   panX: () => state.panX,
   panY: () => state.panY,
   scale: () => state.scale,
-  onUpdate: (set) => {
-    set.setPanX(...);
-    set.setPanY(...);
-    set.setScale(...);
+  onUpdate: (fn) => {
+    fn({
+      setPanX: (value) => { state.panX = value; },
+      setPanY: (value) => { state.panY = value; },
+      setScale: (value) => { state.scale = value; },
+    });
+    render(); // e.g. redraw your canvas / SVG after the transform changes
   },
   // optional:
   minScale: 0.01,
@@ -47,6 +64,10 @@ core.onWheel(x, y, deltaY);
 
 ## DOM wrapper
 
+`createPanScaleControl` wraps the core for `HTMLElement` targets. It takes the
+same getters and the same `onUpdate` contract described above; pointer capture
+and client-to-local coordinate conversion are handled for you.
+
 ```ts
 import { createPanScaleControl } from "@random-mesh/rm-pan-scale";
 
@@ -55,7 +76,14 @@ const control = createPanScaleControl({
   panX: () => state.panX,
   panY: () => state.panY,
   scale: () => state.scale,
-  onUpdate: (set) => { ... },
+  onUpdate: (fn) => {
+    fn({
+      setPanX: (value) => { state.panX = value; },
+      setPanY: (value) => { state.panY = value; },
+      setScale: (value) => { state.scale = value; },
+    });
+    render();
+  },
 });
 
 element.addEventListener("pointerdown", control.onPointerDown);
