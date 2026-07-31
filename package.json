@@ -1,6 +1,6 @@
 {
   "name": "@random-mesh/rm-pan-scale",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "DOM-independent pan/scale (pan-zoom) gesture math with an optional DOM pointer/wheel adapter.",
   "keywords": [
     "pan",
