@@ -134,16 +134,20 @@ export function createPanScaleCore(params: PanScaleCoreParams): PanScaleCore {
 
         if (prevDist !== undefined && prevCenter !== undefined && prevDist > 0) {
           let oldScale = scale();
-          let next = zoomAboutPoint(
-            { panX: panX(), panY: panY(), scale: oldScale, },
-            prevCenter,
-            currDist / prevDist,
-            minScale,
-          );
+          let newScale = Math.max(minScale, oldScale * (currDist / prevDist));
+
+          // World point that was under the previous pinch midpoint
+          let worldX = panX() + prevCenter.x / oldScale;
+          let worldY = panY() + prevCenter.y / oldScale;
+
+          // Keep that world point under the current midpoint (zoom + pan)
+          let newPanX = worldX - currCenter.x / newScale;
+          let newPanY = worldY - currCenter.y / newScale;
+
           onUpdate(({ setPanX, setPanY, setScale, }) => {
-            setPanX(next.panX);
-            setPanY(next.panY);
-            setScale(next.scale);
+            setPanX(newPanX);
+            setPanY(newPanY);
+            setScale(newScale);
           });
         }
 

@@ -50,14 +50,24 @@ describe("createPanScaleCore", () => {
     expect(s.state()).toEqual({ panX: -10, panY: -10, scale: 2 });
   });
 
-  it("pinch-zooms around the previous center with two pointers", () => {
+  it("pinch-zooms around the moving midpoint with two pointers", () => {
     let s = makeState({ panX: 0, panY: 0, scale: 1 });
     let core = createPanScaleCore(s);
     core.onPointerDown(1, 0, 0);
     core.onPointerDown(2, 100, 0);
     core.onPointerMove(1, 0, 0);
     core.onPointerMove(2, 200, 0);
-    expect(s.state()).toEqual({ panX: 25, panY: 0, scale: 2 });
+    expect(s.state()).toEqual({ panX: 0, panY: 0, scale: 2 });
+  });
+
+  it("pans with two pointers when the pinch midpoint moves", () => {
+    let s = makeState({ panX: 0, panY: 0, scale: 1 });
+    let core = createPanScaleCore(s);
+    core.onPointerDown(1, 0, 0);
+    core.onPointerDown(2, 100, 0);
+    core.onPointerMove(1, 10, 0);
+    core.onPointerMove(2, 110, 0);
+    expect(s.state()).toEqual({ panX: -10, panY: 0, scale: 1 });
   });
 
   it("pinch clamps scale to minScale", () => {
