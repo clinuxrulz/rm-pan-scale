@@ -1,0 +1,53 @@
+{
+  "name": "@random-mesh/rm-pan-scale",
+  "version": "0.0.0",
+  "description": "DOM-independent pan/scale (pan-zoom) gesture math with an optional DOM pointer/wheel adapter.",
+  "keywords": [
+    "pan",
+    "zoom",
+    "pan-scale",
+    "pinch",
+    "wheel",
+    "pointer",
+    "gesture",
+    "typescript"
+  ],
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/rm-pan-scale.js",
+  "types": "./dist/rm-pan-scale.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/rm-pan-scale.d.ts",
+      "import": "./dist/rm-pan-scale.js"
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "build:watch": "vite build --watch",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prepare": "pnpm run build",
+    "test": "vitest run",
+    "dev:mandelbrot": "pnpm --filter mandelbrot dev",
+    "build:mandelbrot": "pnpm --filter mandelbrot build"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clinuxrulz/rm-pan-scale.git"
+  },
+  "homepage": "https://github.com/clinuxrulz/rm-pan-scale",
+  "bugs": {
+    "url": "https://github.com/clinuxrulz/rm-pan-scale/issues"
+  },
+  "devDependencies": {
+    "@microsoft/api-extractor": "^7.58.12",
+    "typescript": "^5.7.2",
+    "vite": "^7.1.4",
+    "vite-plugin-dts": "^5.0.3",
+    "vitest": "^4.1.3"
+  }
+}
