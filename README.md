@@ -1,7 +1,7 @@
 # @random-mesh/rm-pan-scale
 
 [![npm version](https://img.shields.io/npm/v/@random-mesh/rm-pan-scale.svg)](https://www.npmjs.com/package/@random-mesh/rm-pan-scale)
-[![License: MIT](https://img.shields.io/npm/l/@random-mesh/rm-pan-scale.svg)](https://github.com/clinuxrulz/rm-pan-scale)
+[![License: MIT](https://img.shields.io/github/license/clinuxrulz/rm-pan-scale.svg)](https://github.com/clinuxrulz/rm-pan-scale)
 [![GitHub stars](https://img.shields.io/github/stars/clinuxrulz/rm-pan-scale?style=social)](https://github.com/clinuxrulz/rm-pan-scale)
 
 DOM-independent pan/zoom gesture math with an optional DOM pointer/wheel adapter.
