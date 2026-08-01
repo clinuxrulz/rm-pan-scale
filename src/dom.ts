@@ -7,6 +7,7 @@ export interface PanScaleControlParams {
   panY: () => number;
   scale: () => number;
   onUpdate: (fn: (setters: PanScaleSetters) => void) => void;
+  disable?: () => boolean,
   minScale?: number;
 }
 
@@ -49,6 +50,9 @@ export function createPanScaleControl(params: PanScaleControlParams): PanScaleCo
 
   return {
     onPointerDown: (e: PointerEvent) => {
+      if (params.disable?.()) {
+        return;
+      }
       let target2 = target();
       if (target2 === undefined) {
         return;
@@ -58,6 +62,9 @@ export function createPanScaleControl(params: PanScaleControlParams): PanScaleCo
     },
 
     onPointerMove: (e: PointerEvent) => {
+      if (params.disable?.()) {
+        return;
+      }
       let target2 = target();
       if (target2 === undefined) {
         return;
@@ -83,6 +90,9 @@ export function createPanScaleControl(params: PanScaleControlParams): PanScaleCo
     },
 
     onWheel: (e: WheelEvent) => {
+      if (params.disable?.()) {
+        return;
+      }
       let target2 = target();
       if (target2 === undefined) {
         return;

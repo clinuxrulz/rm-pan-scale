@@ -20,6 +20,7 @@ export interface PanScaleCoreParams {
   panY: () => number;
   scale: () => number;
   onUpdate: (fn: (setters: PanScaleSetters) => void) => void;
+  disable?: () => boolean,
   minScale?: number;
   setPointerCapture?: (pointerId: number) => void;
   releasePointerCapture?: (pointerId: number) => void;
@@ -83,6 +84,9 @@ export function createPanScaleCore(params: PanScaleCoreParams): PanScaleCore {
 
   return {
     onPointerDown: (pointerId: number, x: number, y: number) => {
+      if (params.disable?.()) {
+        return;
+      }
       setPointerCapture?.(pointerId);
 
       let pos = { x, y, };
@@ -106,6 +110,9 @@ export function createPanScaleCore(params: PanScaleCoreParams): PanScaleCore {
     },
 
     onPointerMove: (pointerId: number, x: number, y: number) => {
+      if (params.disable?.()) {
+        return;
+      }
       if (!activePointers.has(pointerId)) {
         return;
       }
@@ -161,6 +168,9 @@ export function createPanScaleCore(params: PanScaleCoreParams): PanScaleCore {
     onPointerCancel: handlePointerUp,
 
     onWheel: (x: number, y: number, deltaY: number) => {
+      if (params.disable?.()) {
+        return;
+      }
       let wheelY = deltaY > 0 ? -1 : 1;
       if (wheelY === 0) {
         return;

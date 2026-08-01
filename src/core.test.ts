@@ -144,4 +144,35 @@ describe("createPanScaleCore", () => {
     core.onPointerMove(1, 50, 0);
     expect(s.state()).toEqual({ panX: -50, panY: 0, scale: 1 });
   });
+
+  it("blocks pointer move and wheel transforms while disabled", () => {
+    let s = makeState({ panX: 0, panY: 0, scale: 2 });
+    let disabled = false;
+    let core = createPanScaleCore({
+      ...s,
+      disable: () => disabled,
+    });
+    core.onPointerDown(1, 10, 20);
+    disabled = true;
+    core.onPointerMove(1, 30, 40);
+    expect(s.state()).toEqual({ panX: 0, panY: 0, scale: 2 });
+    core.onWheel(0, 0, -100);
+    expect(s.state()).toEqual({ panX: 0, panY: 0, scale: 2 });
+  });
+
+  it("cleans up state on pointer up even when disabled mid-gesture", () => {
+    let s = makeState({ panX: 0, panY: 0, scale: 1 });
+    let disabled = false;
+    let core = createPanScaleCore({
+      ...s,
+      disable: () => disabled,
+    });
+    core.onPointerDown(1, 10, 20);
+    disabled = true;
+    core.onPointerUp(1);
+    disabled = false;
+    core.onPointerDown(2, 0, 0);
+    core.onPointerMove(2, 50, 0);
+    expect(s.state()).toEqual({ panX: -50, panY: 0, scale: 1 });
+  });
 });
